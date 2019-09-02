@@ -13,22 +13,24 @@
     <div class="wrapper">
         <h1>Choose one option:</h1>
         <div class="images">
-            <img src="images/paper.png" alt="paper">
-            <img src="images/stone.png" alt="stone">
-            <img src="images/scissors.png" alt="scissors">
-            <img>
+            <img src="images/paper.png" alt="paper" data-option="paper">
+            <img src="images/stone.png" alt="stone" data-option="stone">
+            <img src="images/scissors.png" alt="scissors" data-option="scissors">
         </div>
         <p>VS</p>
-        <div class="imageAI"></div>
+        <div class="imageAI">
+            <img src="" alt="" data-status="notShow">
+        </div>
         <div class="result">
             <div class="finalText"></div>
             <div class="playerResult"></div>
             <div class="AIResult"></div>
             <div class="gamesQuantity"></div>
         </div>
-    </div>
+        <button class="play" data-status="notShow">Play again</button>
     </div>
     <script src="scriptGame.js"></script>
+
 </body>
 
 </html>

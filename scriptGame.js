@@ -1,70 +1,70 @@
-const imagesTable = document.querySelectorAll('div.images img');
+const optionImages = document.querySelectorAll('div.images img');
 const tableOfChooseOptions = ["paper", "stone", "scissors"];
-let aISelection;
-let userSelection;
-const userWin = false;
+
 const printedResult = document.querySelector('.finalText');
 
-let numberOfGames = 0;
-let playerResult = 0;
-let AIResult = 0;
+const singularGame = {
+    aISelection: "",
+    userSelection: "",
+    userWin: false
+}
 
+const gameSummary = {
+    numberOfGames: 0,
+    playerResult: 0,
+    AIResult: 0
+}
 
-const drawImageByAI = () => {
-    if (aISelection == undefined) {
+let drawImageByAI = () => {
+    if (singularGame.aISelection == "") {
         const randomIndex = Math.floor(Math.random() * tableOfChooseOptions.length);
-        aISelection = tableOfChooseOptions[randomIndex];
-        const AIChosenImage = document.createElement('img');
-        AIChosenImage.src = "images/" + aISelection + ".png";
-        document.querySelector('div.imageAI').appendChild(AIChosenImage);
-        return aISelection;
+        singularGame.aISelection = tableOfChooseOptions[randomIndex];
+        const AIChosenImage = document.querySelector('.imageAI img');
+        AIChosenImage.dataset.status = "show";
+        AIChosenImage.src = "images/" + singularGame.aISelection + ".png";
+        return singularGame.aISelection;
     }
 }
 
 let checkingTheWinner = function () {
-    numberOfGames++;
-    if (aISelection == userSelection) {
+    gameSummary.numberOfGames++;
+    if (singularGame.aISelection == singularGame.userSelection) {
         printedResult.textContent = "It's a tie";
-    } else if ((userSelection === "scissors" && aISelection == "paper") || (userSelection === "paper" && aISelection == "stone") || (userSelection === "stone" && aISelection == "scissors")) {
+    } else if ((singularGame.userSelection === "scissors" && singularGame.aISelection == "paper") || (singularGame.userSelection === "paper" && singularGame.aISelection == "stone") || (singularGame.userSelection === "stone" && singularGame.aISelection == "scissors")) {
         printedResult.textContent = "Congrats, you won !!!";
-        playerResult++;
+        gameSummary.playerResult++;
     } else {
         printedResult.textContent = "Sorry, you lost. Try  one more time";
-        AIResult++;
+        gameSummary.AIResult++;
         return;
     }
 }
 
 const countingPoints = function () {
-    // document.querySelector('.playerResult').textContent = "Twoja liczba punktów: ";
-    document.querySelector('.playerResult').textContent = 'Twoja liczba punktów: ' + playerResult;
-    document.querySelector('.AIResult').textContent = 'Liczba punktów przeciwnika: ' + AIResult;
-    document.querySelector('.gamesQuantity').textContent = 'Gry: ' + numberOfGames;
-    // resultBlock.textContent = ""
+    document.querySelector('.playerResult').textContent = 'Twoja liczba punktów: ' + gameSummary.playerResult;
+    document.querySelector('.AIResult').textContent = 'Liczba punktów przeciwnika: ' + gameSummary.AIResult;
+    document.querySelector('.gamesQuantity').textContent = 'Gry: ' + gameSummary.numberOfGames;
+}
+
+
+const selectOption = function () {
+    optionImages.forEach(function (j) {
+        j.setAttribute("data-selection", "notPickedOut")
+    });
+    this.setAttribute("data-selection", "pickedOut");
+    singularGame.userSelection = this.dataset.option;
+    drawImageByAI();
+    checkingTheWinner();
+    countingPoints();
+    const playAgainButton = document.querySelector('button.play');
+    playAgainButton.dataset.status = "show";
+    playAgainButton.addEventListener('click', playAgain);
 }
 
 let pickOutOption = function () {
-    imagesTable.forEach(function (i) {
+    optionImages.forEach(function (i) {
         i.style.boxShadow = "none";
-        i.addEventListener('click', function () {
-            imagesTable.forEach((j) => j.setAttribute("data-selection", "notPickedOut"));
-            // imagesTable.setAttribute("data-selection", "notPickedOut");
-            // this.style.padding = "50px";
-            // this.style.borderRadius = "50%";
-            // this.style.boxShadow = "0px 0px 30px grey";
-            // document.querySelector("h1 + div").className = "notPicked";
-            this.setAttribute("data-selection", "pickedOut");
-            // showResultOfPlayers();
-            console.log("wybrano");
-            userSelection = this.getAttribute('src').slice(7, -4);
-            drawImageByAI();
-            checkingTheWinner();
-            countingPoints();
-            const playAgainButton = document.createElement('button');
-            playAgainButton.className = "play";
-            playAgainButton.textContent = "Play again";
-            document.querySelector('.result').appendChild(playAgainButton);
-        })
+        i.addEventListener('click', selectOption)
     });
 }
 
@@ -72,7 +72,16 @@ let showResultOfPlayers = function () {
     document.querySelector(".imagesNotPicked").className = "imagesPicked";
 }
 
-
-
-countingPoints();
+const startGame = function () {
+    countingPoints();
+    pickOutOption();
+}
+const playAgain = function () {
+    optionImages.forEach(function (j) {
+        j.setAttribute("data-selection", "beginPostion");
+        printedResult.textContent = "";
+    });
+    singularGame.aISelection = "";
+    document.querySelector(".imageAI img").dataset.status = "notShow";
+};
 pickOutOption();
