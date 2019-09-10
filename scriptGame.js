@@ -65,7 +65,7 @@ const updateDiplayedResults = function () {
 
 const playAgain = function () {
     imagesOfAllOptions.forEach(function (j) {
-        j.setAttribute("data-selection", "beginPostion"); //notPickedOut
+        j.setAttribute("data-selection", "beginPosition"); //notPickedOut
         annoucmentOfResult.textContent = "";
     });
     singularGame.aISelection = "";
