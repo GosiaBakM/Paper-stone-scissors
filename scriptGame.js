@@ -32,8 +32,9 @@ const changeStatusOfSelectedItem = function () {
     });
     this.setAttribute("data-selection", "pickedOut");
     singularGame.playerSelection = this.dataset.option;
-    showAfterPlayerClicking();
     drawImageByAI();
+    showAfterPlayerClicking();
+
 }
 
 let getUserChoice = function () {
@@ -45,18 +46,20 @@ let getUserChoice = function () {
 
 let checkTheWinner = function () {
     gameSummary.numberOfGames++;
-    if (singularGame.aISelection == singularGame.playerSelection) {
+    if (singularGame.aISelection === singularGame.playerSelection) {
         annoucmentOfResult.textContent = "It's a tie";
-    } else if ((singularGame.playerSelection === "scissors" && singularGame.aISelection == "paper") || (singularGame.playerSelection === "paper" && singularGame.aISelection == "stone") || (singularGame.playerSelection === "stone" && singularGame.aISelection == "scissors")) {
+        singularGame.playerVictory = false;
+    } else if ((singularGame.playerSelection === "scissors" && singularGame.aISelection === "paper") || (singularGame.playerSelection === "paper" && singularGame.aISelection == "stone") || (singularGame.playerSelection === "stone" && singularGame.aISelection == "scissors")) {
         annoucmentOfResult.textContent = "Congrats, you won !!!";
+        singularGame.playerVictory = true;
         gameSummary.playerResult++;
     } else {
         annoucmentOfResult.textContent = "Sorry, you lost. Try  one more time";
+        singularGame.playerVictory = false;
         gameSummary.AIResult++;
     }
 }
 
-//ok
 const updateDiplayedResults = function () {
     document.querySelector('.playerResult').textContent = 'Player score: ' + gameSummary.playerResult;
     document.querySelector('.AIResult').textContent = 'IA score: ' + gameSummary.AIResult;
@@ -92,7 +95,6 @@ const showAfterPlayerClicking = function () {
 
 const gameStart = function () {
     getUserChoice();
-
 }
 
 gameStart();
